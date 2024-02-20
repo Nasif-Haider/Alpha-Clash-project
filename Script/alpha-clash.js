@@ -23,6 +23,21 @@ function setBackgroundColor(elementId){
     const element = document.getElementById(elementId);
     element.classList.add('bg-orange-400');
 }
+function removeBackgroundColor(elementId){
+    const element = document.getElementById(elementId);
+    element.classList.remove('bg-orange-400');
+}
+
+function getTextElementValueById (elementId){
+    const element = document.getElementById(elementId);
+    const elementTextValue = element.innerText;
+    const value = parseInt(elementTextValue);
+    return value;
+}
+function setTextElementValueById(elementId,value){
+    const element = document.getElementById(elementId);
+    element.innerText = value;
+}
 
 function getRandomAlphabet(){
     // Get or create an alphabet array
@@ -52,10 +67,28 @@ function handleKeyBoardKeyUpEvent(event){
 
     // checked matched or not
     if (playerPressed === expectedAlphabet){
-        console.log('you got a point');
+        // For updating score: 1. Get the current score
+        const currentScore = getTextElementValueById('current-score');
+        //2. Increase the score by 1
+        const newScore = currentScore + 1;
+        //3. show the update score
+        setTextElementValueById('current-score', newScore);
+
+        removeBackgroundColor(expectedAlphabet);
+        continueGame();
     }
     else{
         console.log('you missed, you lost a point');
+        // Get the current life value
+        const currentLife = getTextElementValueById('current-life');
+        // Reduce the life count 
+        const newLife = currentLife - 1;
+        // Display the update life count
+        setTextElementValueById('current-life',newLife);
+
+        if (newLife === 0){
+            gameOver();
+        }
     }
 }
 // Capture keyboard key press 
@@ -78,4 +111,9 @@ function play(){
     hideElementById('home-screen');
     showElementById('play-ground');
     continueGame();
+}
+
+function gameOver(){
+    hideElementById('play-ground');
+    showElementById('final-score');
 }
